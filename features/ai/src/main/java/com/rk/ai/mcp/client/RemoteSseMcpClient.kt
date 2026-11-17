@@ -44,6 +44,7 @@ class RemoteSseMcpClient(val config: McpServerConfig) : McpClient {
                 Log.i(TAG, "Connected to remote MCP server ${config.name} ($serverId)")
                 Unit
             }
+        }
 
     override suspend fun listTools(): Result<List<McpToolDescriptor>> =
         withContext(Dispatchers.IO) {
