@@ -140,13 +140,17 @@ object StoreManager {
 
     fun getThemeReadmeUrl(id: String): String = if (THEMES_API_BASE.isEmpty()) "" else "$THEMES_API_BASE/$id/README.md"
 
-    fun getThemeChangelogUrl(id: String): String = if (THEMES_API_BASE.isEmpty()) "" else "$THEMES_API_BASE/$id/CHANGELOG.md"
+    fun getThemeChangelogUrl(id: String): String =
+        if (THEMES_API_BASE.isEmpty()) "" else "$THEMES_API_BASE/$id/CHANGELOG.md"
 
-    fun getIconPackIconUrl(id: String): String = if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/icon.png"
+    fun getIconPackIconUrl(id: String): String =
+        if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/icon.png"
 
-    fun getIconPackReadmeUrl(id: String): String = if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/README.md"
+    fun getIconPackReadmeUrl(id: String): String =
+        if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/README.md"
 
-    fun getIconPackChangelogUrl(id: String): String = if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/CHANGELOG.md"
+    fun getIconPackChangelogUrl(id: String): String =
+        if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/CHANGELOG.md"
 
     private fun requestJson(url: String): String {
         if (url.isEmpty()) return ""

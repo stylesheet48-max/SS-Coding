@@ -20,12 +20,12 @@ internal object XedAccountClient {
                 throw AccountApiException("Account service is not configured (Offline Mode)")
             }
             execute(
-                Request.Builder()
-                    .url("${AccountConfig.API_BASE}/auth/android/begin")
-                    .post(jsonBody("codeChallenge" to codeChallenge))
-                    .build()
-            )
-            .let { accountJson.decodeFromString<AuthState>(it) }
+                    Request.Builder()
+                        .url("${AccountConfig.API_BASE}/auth/android/begin")
+                        .post(jsonBody("codeChallenge" to codeChallenge))
+                        .build()
+                )
+                .let { accountJson.decodeFromString<AuthState>(it) }
         }
 
     suspend fun exchange(code: String, codeVerifier: String): TokenResponse =
@@ -34,12 +34,12 @@ internal object XedAccountClient {
                 throw AccountApiException("Account service is not configured (Offline Mode)")
             }
             execute(
-                Request.Builder()
-                    .url("${AccountConfig.API_BASE}/auth/android/token")
-                    .post(jsonBody("code" to code, "codeVerifier" to codeVerifier))
-                    .build()
-            )
-            .let { accountJson.decodeFromString<TokenResponse>(it) }
+                    Request.Builder()
+                        .url("${AccountConfig.API_BASE}/auth/android/token")
+                        .post(jsonBody("code" to code, "codeVerifier" to codeVerifier))
+                        .build()
+                )
+                .let { accountJson.decodeFromString<TokenResponse>(it) }
         }
 
     suspend fun refresh(refreshToken: String): TokenResponse =
@@ -48,12 +48,12 @@ internal object XedAccountClient {
                 throw AccountApiException("Account service is not configured (Offline Mode)")
             }
             execute(
-                Request.Builder()
-                    .url("${AccountConfig.API_BASE}/auth/android/refresh")
-                    .post(jsonBody("refreshToken" to refreshToken))
-                    .build()
-            )
-            .let { accountJson.decodeFromString<TokenResponse>(it) }
+                    Request.Builder()
+                        .url("${AccountConfig.API_BASE}/auth/android/refresh")
+                        .post(jsonBody("refreshToken" to refreshToken))
+                        .build()
+                )
+                .let { accountJson.decodeFromString<TokenResponse>(it) }
         }
 
     suspend fun logout(accessToken: String) {
