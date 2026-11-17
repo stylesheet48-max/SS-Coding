@@ -1,5 +1,6 @@
 package com.rk.ai.settings
 
+import com.rk.ai.mcp.security.McpSecureVault
 import com.rk.settings.CachedPreference
 import com.rk.settings.Preference
 import kotlinx.serialization.builtins.ListSerializer
@@ -31,11 +32,25 @@ object AiSettings {
         storedDisabledTools = encodeToolNames(if (enabled) current - name else current + name)
     }
 
-    /** The credential for [providerId]; each provider keeps its own. */
-    fun apiKey(providerId: String): String = Preference.getString(apiKeyPreference(providerId), "")
+    /** The credential for [providerId]; each provider keeps its own in hardware-backed McpSecureVault. */
+    fun apiKey(providerId: String): String {
+        val secretKey = apiKeyPreference(providerId)
+        val encrypted = McpSecureVault.getSecret(secretKey)
+        if (!encrypted.isNullOrBlank()) return encrypted
+
+        // Smooth migration from legacy plaintext storage
+        val legacy = Preference.getString(secretKey, "")
+        if (legacy.isNotBlank()) {
+            McpSecureVault.saveSecret(secretKey, legacy)
+        }
+        return legacy
+    }
 
     fun setApiKey(providerId: String, key: String) {
-        Preference.setString(apiKeyPreference(providerId), key.trim())
+        val secretKey = apiKeyPreference(providerId)
+        val trimmed = key.trim()
+        McpSecureVault.saveSecret(secretKey, trimmed)
+        Preference.setString(secretKey, "") // Wipe plaintext fallback
     }
 
     fun currentPermissionMode(): PermissionMode =
@@ -55,7 +70,7 @@ object AiSettings {
         Json.encodeToString(ListSerializer(String.serializer()), names.toList())
 
     const val DEFAULT_SYSTEM_PROMPT: String =
-        "You are Xed AI, a coding assistant embedded in the Xed Editor Android app. " +
+        "You are SS coding AI, an intelligent coding assistant embedded in the SS coding Android application. " +
             "Be concise and precise. When you propose code changes, name the exact file paths " +
             "and keep edits minimal and focused."
 }

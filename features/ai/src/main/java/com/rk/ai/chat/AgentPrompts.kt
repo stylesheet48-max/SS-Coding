@@ -25,7 +25,7 @@ internal fun buildSystemPrompt(base: String, goal: String?, todos: List<AiTodo>)
 }
 
 internal fun buildConversationPrompt(systemPrompt: String, history: List<AiTurn>): Prompt =
-    prompt("xed-ai-chat") {
+    prompt("ss-coding-ai-chat") {
         system(systemPrompt)
         history.forEach { turn ->
             when (turn) {

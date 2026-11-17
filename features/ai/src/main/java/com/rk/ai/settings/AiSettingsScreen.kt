@@ -50,7 +50,11 @@ import com.rk.resources.getString
 import com.rk.resources.strings
 
 @Composable
-fun AiSettingsScreen(modifier: Modifier = Modifier, onOpenMemory: () -> Unit = {}) {
+fun AiSettingsScreen(
+    modifier: Modifier = Modifier,
+    onOpenMemory: () -> Unit = {},
+    onOpenMcp: () -> Unit = {},
+) {
     var editing by remember { mutableStateOf<EditTarget?>(null) }
     var providerMenuOpen by remember { mutableStateOf(false) }
 
@@ -149,6 +153,23 @@ fun AiSettingsScreen(modifier: Modifier = Modifier, onOpenMemory: () -> Unit = {
                         else -> stringResource(strings.ai_memory_notes, count)
                     },
                 onClick = { onOpenMemory() },
+            )
+        }
+
+        PreferenceGroup(heading = "Model Context Protocol (MCP)") {
+            val servers by com.rk.ai.mcp.engine.McpRegistry.servers.collectAsState()
+            val pending by com.rk.ai.mcp.engine.McpRegistry.pendingApprovals.collectAsState()
+            val desc = if (pending.isNotEmpty()) {
+                "${pending.size} server(s) awaiting security approval"
+            } else if (servers.isEmpty()) {
+                "Configure Local & Remote MCP servers"
+            } else {
+                "${servers.size} configured server(s)"
+            }
+            NextScreenCard(
+                label = "MCP Servers & Tools",
+                description = desc,
+                onClick = { onOpenMcp() },
             )
         }
 

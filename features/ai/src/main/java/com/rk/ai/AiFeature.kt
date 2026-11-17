@@ -5,6 +5,8 @@ import com.rk.ai.api.AiExtensions
 import com.rk.ai.command.AIChatCommand
 import com.rk.ai.icons.SparklesBig
 import com.rk.ai.icons.SparklesTiny
+import com.rk.ai.mcp.engine.McpStartupOrchestrator
+import com.rk.ai.mcp.ui.McpManagerScreen
 import com.rk.ai.settings.AiMemoryScreen
 import com.rk.ai.settings.AiSettingsScreen
 import com.rk.ai.tab.AiTab
@@ -35,6 +37,7 @@ class AiFeature : Feature {
     override fun init(application: Application) {
         AiExtensions.installBuiltins()
         AiTab.register()
+        McpStartupOrchestrator.start(application)
         registerSettings()
         registerCommands()
     }
@@ -61,9 +64,16 @@ class AiFeature : Feature {
 
         settingsRoutes +=
             DynamicRoute(AI_SETTINGS_ROUTE) { navController, _ ->
-                AiSettingsScreen(onOpenMemory = { navController.navigate(AI_MEMORY_ROUTE) })
+                AiSettingsScreen(
+                    onOpenMemory = { navController.navigate(AI_MEMORY_ROUTE) },
+                    onOpenMcp = { navController.navigate(AI_MCP_ROUTE) },
+                )
             }
         settingsRoutes += DynamicRoute(AI_MEMORY_ROUTE) { _, _ -> AiMemoryScreen() }
+        settingsRoutes +=
+            DynamicRoute(AI_MCP_ROUTE) { navController, _ ->
+                McpManagerScreen(onBack = { navController.popBackStack() })
+            }
         settingsRoutes.forEach { SettingsRegistry.registerRoute(it) }
     }
 
@@ -75,12 +85,13 @@ class AiFeature : Feature {
 
         settingsCategory?.let { SettingsRegistry.unregisterCategory(it) }
         settingsCategory = null
-        settingsRoutes.forEach { SettingsRegistry.unregisterRoute(it) }
+        settingsRoutes.forEach { SettingsRegistry.registerRoute(it) }
         settingsRoutes.clear()
     }
 
     private companion object {
         private const val AI_SETTINGS_ROUTE = "ai_settings"
         private const val AI_MEMORY_ROUTE = "ai_memory"
+        private const val AI_MCP_ROUTE = "ai_mcp"
     }
 }
