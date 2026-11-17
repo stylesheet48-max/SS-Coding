@@ -11,7 +11,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -242,7 +241,7 @@ fun PluginsDrawerPanel() {
                         modifier =
                             Modifier.clip(RoundedCornerShape(10.dp))
                                 .background(Color(0xFF7C3AED).copy(alpha = 0.12f))
-                                .padding(horizontal = 6.dp, vertical = 2.dp),
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
                     ) {
                         Text(
                             text = currentPackages.size.toString(),
@@ -341,9 +340,7 @@ fun PluginsDrawerPanel() {
                             ExtensionSortOptions.entries.forEach { opt ->
                                 DropdownMenuItem(
                                     text = { Text(stringResource(opt.stringRes), fontSize = 13.sp) },
-                                    leadingIcon = {
-                                        RadioButton(selected = currentSortOption == opt, onClick = null)
-                                    },
+                                    leadingIcon = { RadioButton(selected = currentSortOption == opt, onClick = null) },
                                     onClick = {
                                         currentSortOption = opt
                                         showFilterMenu = false
@@ -420,14 +417,16 @@ fun PluginsDrawerPanel() {
                                 painter = painterResource(category.drawableRes),
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
-                                tint = if (isSelected) Color(0xFF7C3AED) else MaterialTheme.colorScheme.onSurfaceVariant,
+                                tint =
+                                    if (isSelected) Color(0xFF7C3AED) else MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Spacer(Modifier.width(6.dp))
                             Text(
                                 text = stringResource(category.stringRes),
                                 fontSize = 12.5.sp,
                                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                                color = if (isSelected) Color(0xFF7C3AED) else MaterialTheme.colorScheme.onSurfaceVariant,
+                                color =
+                                    if (isSelected) Color(0xFF7C3AED) else MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     },

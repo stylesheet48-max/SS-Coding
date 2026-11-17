@@ -85,9 +85,7 @@ fun PackageCard(
         startWidget = {
             Box(
                 modifier =
-                    Modifier.size(46.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(categoryColor.copy(alpha = 0.12f)),
+                    Modifier.size(46.dp).clip(RoundedCornerShape(12.dp)).background(categoryColor.copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center,
             ) {
                 AsyncImage(

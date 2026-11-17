@@ -211,10 +211,11 @@ fun DrawerContent(fullscreen: Boolean) {
                                 }
                             }
 
-                            if (showHorizontalDivider) HorizontalDivider(
-                                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                                modifier = Modifier.padding(horizontal = 8.dp),
-                            )
+                            if (showHorizontalDivider)
+                                HorizontalDivider(
+                                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                                    modifier = Modifier.padding(horizontal = 8.dp),
+                                )
 
                             Column(
                                 modifier = Modifier.wrapContentHeight().padding(vertical = 8.dp),
@@ -223,11 +224,15 @@ fun DrawerContent(fullscreen: Boolean) {
                                 serviceTabs.forEach { tab ->
                                     if (!tab.isSupported(currentDrawerTab)) return@forEach
                                     val isTabSelected = currentServiceTab == tab
-                                    val accentColor = when {
-                                        tab.getName().equals(strings.git.getString(), ignoreCase = true) || tab.getName().contains("git", ignoreCase = true) -> Color(0xFFF97316)
-                                        tab.getName().equals(strings.ext.getString(), ignoreCase = true) || tab.getName().contains("plugin", ignoreCase = true) || tab.getName().contains("ext", ignoreCase = true) -> Color(0xFF7C3AED)
-                                        else -> Color(0xFF0D9488)
-                                    }
+                                    val accentColor =
+                                        when {
+                                            tab.getName().equals(strings.git.getString(), ignoreCase = true) ||
+                                                tab.getName().contains("git", ignoreCase = true) -> Color(0xFFF97316)
+                                            tab.getName().equals(strings.ext.getString(), ignoreCase = true) ||
+                                                tab.getName().contains("plugin", ignoreCase = true) ||
+                                                tab.getName().contains("ext", ignoreCase = true) -> Color(0xFF7C3AED)
+                                            else -> Color(0xFF0D9488)
+                                        }
 
                                     DrawerRailItem(
                                         selected = isTabSelected,
@@ -324,37 +329,43 @@ private fun DrawerRailItem(
     val isActuallySelected = selected && !isDimmed
     val isLight = MaterialTheme.colorScheme.surface.luminance() > 0.5f
 
-    val containerBg = when {
-        isActuallySelected -> accentColor.copy(alpha = if (isLight) 0.16f else 0.24f)
-        selected && isDimmed -> accentColor.copy(alpha = if (isLight) 0.08f else 0.12f)
-        else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (isLight) 0.35f else 0.18f)
-    }
+    val containerBg =
+        when {
+            isActuallySelected -> accentColor.copy(alpha = if (isLight) 0.16f else 0.24f)
+            selected && isDimmed -> accentColor.copy(alpha = if (isLight) 0.08f else 0.12f)
+            else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (isLight) 0.35f else 0.18f)
+        }
 
-    val borderModifier = when {
-        isActuallySelected -> Modifier.border(
-            width = 1.dp,
-            color = accentColor.copy(alpha = 0.55f),
-            shape = RoundedCornerShape(13.dp),
-        )
-        selected && isDimmed -> Modifier.border(
-            width = 1.dp,
-            color = accentColor.copy(alpha = 0.25f),
-            shape = RoundedCornerShape(13.dp),
-        )
-        else -> Modifier
-    }
+    val borderModifier =
+        when {
+            isActuallySelected ->
+                Modifier.border(
+                    width = 1.dp,
+                    color = accentColor.copy(alpha = 0.55f),
+                    shape = RoundedCornerShape(13.dp),
+                )
+            selected && isDimmed ->
+                Modifier.border(
+                    width = 1.dp,
+                    color = accentColor.copy(alpha = 0.25f),
+                    shape = RoundedCornerShape(13.dp),
+                )
+            else -> Modifier
+        }
 
-    val iconTint = when {
-        isActuallySelected -> accentColor
-        selected && isDimmed -> accentColor.copy(alpha = 0.65f)
-        else -> MaterialTheme.colorScheme.onSurfaceVariant
-    }
+    val iconTint =
+        when {
+            isActuallySelected -> accentColor
+            selected && isDimmed -> accentColor.copy(alpha = 0.65f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        }
 
-    val textColor = when {
-        isActuallySelected -> accentColor
-        selected && isDimmed -> accentColor.copy(alpha = 0.7f)
-        else -> MaterialTheme.colorScheme.onSurfaceVariant
-    }
+    val textColor =
+        when {
+            isActuallySelected -> accentColor
+            selected && isDimmed -> accentColor.copy(alpha = 0.7f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        }
 
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -362,12 +373,12 @@ private fun DrawerRailItem(
     ) {
         if (isActuallySelected) {
             Box(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .width(3.dp)
-                    .height(22.dp)
-                    .clip(RoundedCornerShape(topEnd = 3.dp, bottomEnd = 3.dp))
-                    .background(accentColor)
+                modifier =
+                    Modifier.align(Alignment.CenterStart)
+                        .width(3.dp)
+                        .height(22.dp)
+                        .clip(RoundedCornerShape(topEnd = 3.dp, bottomEnd = 3.dp))
+                        .background(accentColor)
             )
         }
 
@@ -378,16 +389,14 @@ private fun DrawerRailItem(
             enabled = enabled,
             icon = {
                 Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(13.dp))
-                        .background(containerBg)
-                        .then(borderModifier),
+                    modifier =
+                        Modifier.size(44.dp)
+                            .clip(RoundedCornerShape(13.dp))
+                            .background(containerBg)
+                            .then(borderModifier),
                     contentAlignment = Alignment.Center,
                 ) {
-                    CompositionLocalProvider(LocalContentColor provides iconTint) {
-                        icon()
-                    }
+                    CompositionLocalProvider(LocalContentColor provides iconTint) { icon() }
                 }
             },
             label = {
@@ -400,13 +409,14 @@ private fun DrawerRailItem(
                     color = textColor,
                 )
             },
-            colors = NavigationRailItemDefaults.colors(
-                indicatorColor = Color.Transparent,
-                selectedIconColor = accentColor,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                selectedTextColor = textColor,
-                unselectedTextColor = textColor,
-            ),
+            colors =
+                NavigationRailItemDefaults.colors(
+                    indicatorColor = Color.Transparent,
+                    selectedIconColor = accentColor,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    selectedTextColor = textColor,
+                    unselectedTextColor = textColor,
+                ),
         )
     }
 }
