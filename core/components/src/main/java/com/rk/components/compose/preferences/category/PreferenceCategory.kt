@@ -65,10 +65,7 @@ fun PreferenceCategory(
         border = BorderStroke(1.dp, borderColor),
     ) {
         Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 13.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 13.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -79,8 +76,7 @@ fun PreferenceCategory(
                 // Soft blue squircle icon container
                 Box(
                     modifier =
-                        Modifier
-                            .size(46.dp)
+                        Modifier.size(46.dp)
                             .background(
                                 color = iconContainerBg,
                                 shape = RoundedCornerShape(13.dp),

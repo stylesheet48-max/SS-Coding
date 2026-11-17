@@ -65,8 +65,7 @@ fun SettingsScreen(navController: NavController) {
     val isDark = isSystemInDarkTheme()
     Box(
         modifier =
-            Modifier.fillMaxSize()
-                .background(if (isDark) MaterialTheme.colorScheme.background else Color(0xFFF5F7FD)),
+            Modifier.fillMaxSize().background(if (isDark) MaterialTheme.colorScheme.background else Color(0xFFF5F7FD))
     ) {
         PreferenceLayout(
             label = stringResource(id = strings.settings),
@@ -115,7 +114,7 @@ private fun Categories(navController: NavController) {
                                         listOf(Color(0xFF1B243B), Color(0xFF151C30))
                                     } else {
                                         listOf(Color(0xFFEBF1FD), Color(0xFFD6E3FC))
-                                    },
+                                    }
                             ),
                         shape = RoundedCornerShape(22.dp),
                     )
@@ -124,7 +123,7 @@ private fun Categories(navController: NavController) {
                         color = if (isDark) Color(0xFF283656) else Color(0xFFD6E4FA),
                         shape = RoundedCornerShape(22.dp),
                     )
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -240,11 +239,10 @@ private fun Categories(navController: NavController) {
             stringResource(id = strings.git),
             stringResource(id = strings.ai_feature_label),
         )
-    val sortedCategories =
-        dynamicCategories.sortedBy { category ->
-            val idx = preferredOrder.indexOf(category.label)
-            if (idx != -1) idx else 99
-        }
+    val sortedCategories = dynamicCategories.sortedBy { category ->
+        val idx = preferredOrder.indexOf(category.label)
+        if (idx != -1) idx else 99
+    }
 
     sortedCategories.forEach { category ->
         PreferenceCategory(
@@ -312,7 +310,7 @@ private fun Categories(navController: NavController) {
                                         listOf(Color(0xFF1B243B), Color(0xFF151C30))
                                     } else {
                                         listOf(Color(0xFFEBF1FD), Color(0xFFD6E3FC))
-                                    },
+                                    }
                             ),
                         shape = RoundedCornerShape(22.dp),
                     )
@@ -321,7 +319,7 @@ private fun Categories(navController: NavController) {
                         color = if (isDark) Color(0xFF283656) else Color(0xFFD6E4FA),
                         shape = RoundedCornerShape(22.dp),
                     )
-                    .padding(horizontal = 20.dp, vertical = 18.dp),
+                    .padding(horizontal = 20.dp, vertical = 18.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 // Dark navy/indigo squircle badge with </>
@@ -368,10 +366,7 @@ private fun Categories(navController: NavController) {
                     Spacer(modifier = Modifier.height(1.dp))
                     Text(
                         text = "com.stylesheet.editor",
-                        style =
-                            MaterialTheme.typography.bodySmall.copy(
-                                fontSize = 12.sp,
-                            ),
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
                     )
                 }
