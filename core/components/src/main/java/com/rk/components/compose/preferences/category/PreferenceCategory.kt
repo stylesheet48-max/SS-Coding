@@ -1,39 +1,38 @@
 package com.rk.components.compose.preferences.category
 
-/*
- * Copyright 2021, Lawnchair.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rk.components.compose.preferences.base.PreferenceTemplate
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun PreferenceCategory(
@@ -47,43 +46,102 @@ fun PreferenceCategory(
     startWidget: (@Composable () -> Unit)? = null,
     enabled: Boolean = true,
 ) {
-    PreferenceTemplate(
+    val isDark = isSystemInDarkTheme()
+    val cardBg = if (isDark) Color(0xFF1B2030) else Color.White
+    val borderColor = if (isDark) Color(0xFF262D42) else Color(0xFFE8EEF8)
+    val iconContainerBg = if (isDark) Color(0xFF1F2944) else Color(0xFFEEF4FF)
+    val iconTint = if (isDark) Color(0xFF60A5FA) else Color(0xFF2563EB)
+
+    Surface(
         modifier =
             modifier
-                .padding(horizontal = 16.dp)
-                .clip(MaterialTheme.shapes.large)
-                .clickable { onNavigate() }
-                .background(
-                    if (isSelected) MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp) else Color.Transparent
-                ),
-        verticalPadding = 14.dp,
-        title = {
-            Text(
-                text = label,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
-            )
-        },
-        description = {
-            if (description != null) {
-                Text(text = description)
-            }
-        },
-        startWidget = {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(32.dp)) {
-                if (iconResource != null) {
-                    Icon(
-                        painter = painterResource(id = iconResource),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = MaterialTheme.colorScheme.primary,
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.5.dp)
+                .clip(RoundedCornerShape(18.dp))
+                .clickable(enabled = enabled) { onNavigate() },
+        shape = RoundedCornerShape(18.dp),
+        color = cardBg,
+        tonalElevation = 1.dp,
+        border = BorderStroke(1.dp, borderColor),
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 13.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                // Soft blue squircle icon container
+                Box(
+                    modifier =
+                        Modifier
+                            .size(46.dp)
+                            .background(
+                                color = iconContainerBg,
+                                shape = RoundedCornerShape(13.dp),
+                            ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CompositionLocalProvider(LocalContentColor provides iconTint) {
+                        if (iconResource != null) {
+                            Icon(
+                                painter = painterResource(id = iconResource),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                                tint = iconTint,
+                            )
+                        } else if (startWidget != null) {
+                            startWidget()
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(14.dp))
+
+                // Title and Description
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = label,
+                        style =
+                            MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 15.5.sp,
+                            ),
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
-                }
-                if (startWidget != null) {
-                    startWidget()
+                    if (!description.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.height(2.5.dp))
+                        Text(
+                            text = description,
+                            style =
+                                MaterialTheme.typography.bodySmall.copy(
+                                    fontSize = 13.sp,
+                                    lineHeight = 17.sp,
+                                ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
             }
-        },
-        endWidget = { endWidget?.let { it() } },
-        enabled = enabled,
-    )
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // Trailing Chevron Navigation Arrow
+            if (endWidget != null) {
+                endWidget()
+            } else {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                )
+            }
+        }
+    }
 }
