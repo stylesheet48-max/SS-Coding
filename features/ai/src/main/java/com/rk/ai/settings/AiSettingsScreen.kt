@@ -159,13 +159,14 @@ fun AiSettingsScreen(
         PreferenceGroup(heading = "Model Context Protocol (MCP)") {
             val servers by com.rk.ai.mcp.engine.McpRegistry.servers.collectAsState()
             val pending by com.rk.ai.mcp.engine.McpRegistry.pendingApprovals.collectAsState()
-            val desc = if (pending.isNotEmpty()) {
-                "${pending.size} server(s) awaiting security approval"
-            } else if (servers.isEmpty()) {
-                "Configure Local & Remote MCP servers"
-            } else {
-                "${servers.size} configured server(s)"
-            }
+            val desc =
+                if (pending.isNotEmpty()) {
+                    "${pending.size} server(s) awaiting security approval"
+                } else if (servers.isEmpty()) {
+                    "Configure Local & Remote MCP servers"
+                } else {
+                    "${servers.size} configured server(s)"
+                }
             NextScreenCard(
                 label = "MCP Servers & Tools",
                 description = desc,

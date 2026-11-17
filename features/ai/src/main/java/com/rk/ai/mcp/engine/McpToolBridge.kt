@@ -64,19 +64,23 @@ object McpToolBridge {
 
     private fun createAiTool(descriptor: McpToolDescriptor): AiTool {
         val registrationName = toAiToolName(descriptor.serverId, descriptor.name)
-        val kind = when (descriptor.riskClass) {
-            McpRiskClass.CLASS_A_SAFE -> AiToolKind.Read
-            McpRiskClass.CLASS_B_SCOPED -> AiToolKind.Read
-            McpRiskClass.CLASS_C_QUARANTINE -> {
-                val lower = descriptor.name.lowercase()
-                when {
-                    lower.contains("write") || lower.contains("create") || lower.contains("delete") -> AiToolKind.Write
-                    lower.contains("shell") || lower.contains("exec") || lower.contains("terminal") -> AiToolKind.Shell
-                    lower.contains("http") || lower.contains("network") || lower.contains("curl") -> AiToolKind.Network
-                    else -> AiToolKind.Write
+        val kind =
+            when (descriptor.riskClass) {
+                McpRiskClass.CLASS_A_SAFE -> AiToolKind.Read
+                McpRiskClass.CLASS_B_SCOPED -> AiToolKind.Read
+                McpRiskClass.CLASS_C_QUARANTINE -> {
+                    val lower = descriptor.name.lowercase()
+                    when {
+                        lower.contains("write") || lower.contains("create") || lower.contains("delete") ->
+                            AiToolKind.Write
+                        lower.contains("shell") || lower.contains("exec") || lower.contains("terminal") ->
+                            AiToolKind.Shell
+                        lower.contains("http") || lower.contains("network") || lower.contains("curl") ->
+                            AiToolKind.Network
+                        else -> AiToolKind.Write
+                    }
                 }
             }
-        }
 
         val parameters = parseParameters(descriptor.inputSchemaJson)
 
@@ -87,15 +91,16 @@ object McpToolBridge {
             parameters = parameters,
             isDestructive = kind != AiToolKind.Read,
             execute = { args: JsonObject ->
-                val client = McpClientProvider.getClient(descriptor.serverId)
-                    ?: return@AiTool "Error: MCP server '${descriptor.serverId}' is not available."
+                val client =
+                    McpClientProvider.getClient(descriptor.serverId)
+                        ?: return@AiTool "Error: MCP server '${descriptor.serverId}' is not available."
                 val jsonArgs = runCatching { JSONObject(args.toString()) }.getOrDefault(JSONObject())
                 val result = client.callTool(descriptor.name, jsonArgs)
                 result.getOrElse { e ->
                     Log.e(TAG, "Error executing MCP tool '${descriptor.name}'", e)
                     "Error executing MCP tool '${descriptor.name}': ${e.message}"
                 }
-            }
+            },
         )
     }
 
@@ -116,11 +121,13 @@ object McpToolBridge {
                 val propObj = properties.optJSONObject(paramName)
                 val desc = propObj?.optString("description", "") ?: ""
                 val typeStr = propObj?.optString("type", "string") ?: "string"
-                val paramType = when (typeStr) {
-                    "integer", "number" -> ToolParameterType.Integer
-                    "boolean" -> ToolParameterType.Boolean
-                    else -> ToolParameterType.String
-                }
+                val paramType =
+                    when (typeStr) {
+                        "integer",
+                        "number" -> ToolParameterType.Integer
+                        "boolean" -> ToolParameterType.Boolean
+                        else -> ToolParameterType.String
+                    }
                 list.add(
                     AiToolParameter(
                         name = paramName,

@@ -52,23 +52,27 @@ object McpStartupOrchestrator {
         }
     }
 
-    suspend fun refreshServer(serverId: String) = withContext(Dispatchers.IO) {
-        val server = McpRegistry.servers.value.firstOrNull { it.id == serverId } ?: return@withContext
-        checkServer(server)
-    }
+    suspend fun refreshServer(serverId: String) =
+        withContext(Dispatchers.IO) {
+            val server = McpRegistry.servers.value.firstOrNull { it.id == serverId } ?: return@withContext
+            checkServer(server)
+        }
 
     private suspend fun checkAllServers(servers: List<McpServerConfig>) {
         if (_isRefreshing.value) return
         _isRefreshing.value = true
         try {
-            servers.filter { it.enabled }.forEach { server ->
-                runCatching {
-                    checkServer(server)
-                }.onFailure { e ->
-                    Log.e(TAG, "Failed update check for server ${server.id}", e)
-                    McpRegistry.updateServerStatus(server.id, McpServerStatus.ERROR, e.message)
+            servers
+                .filter { it.enabled }
+                .forEach { server ->
+                    runCatching {
+                        checkServer(server)
+                    }
+                        .onFailure { e ->
+                            Log.e(TAG, "Failed update check for server ${server.id}", e)
+                            McpRegistry.updateServerStatus(server.id, McpServerStatus.ERROR, e.message)
+                        }
                 }
-            }
         } finally {
             _isRefreshing.value = false
         }
@@ -117,7 +121,7 @@ object McpStartupOrchestrator {
                 server.id,
                 McpServerStatus.CONNECTED,
                 "Connected (${freshTools.size} tools)",
-                manifestFingerprint
+                manifestFingerprint,
             )
             Log.i(TAG, "Server ${server.id} auto-updated successfully with ${freshTools.size} tools")
         }
@@ -134,7 +138,11 @@ object McpStartupOrchestrator {
             McpRegistry.saveApprovedTools(serverId, freshTools)
             McpToolBridge.syncApprovedTools(serverId, freshTools)
             McpRegistry.clearQuarantinedDiff(serverId)
-            McpRegistry.updateServerStatus(serverId, McpServerStatus.CONNECTED, "Owner Approved (${freshTools.size} tools)")
+            McpRegistry.updateServerStatus(
+                serverId,
+                McpServerStatus.CONNECTED,
+                "Owner Approved (${freshTools.size} tools)",
+            )
             McpRegistry.logAudit("MANUAL_APPROVAL", "Owner approved Class C tools for server $serverId")
         }
     }
@@ -144,7 +152,11 @@ object McpStartupOrchestrator {
             McpRegistry.clearQuarantinedDiff(serverId)
             val current = McpRegistry.getApprovedTools(serverId)
             McpToolBridge.syncApprovedTools(serverId, current)
-            McpRegistry.updateServerStatus(serverId, McpServerStatus.CONNECTED, "Update Rejected (Using prior approved tools)")
+            McpRegistry.updateServerStatus(
+                serverId,
+                McpServerStatus.CONNECTED,
+                "Update Rejected (Using prior approved tools)",
+            )
             McpRegistry.logAudit("MANUAL_REJECTION", "Owner rejected Class C update for server $serverId")
         }
     }

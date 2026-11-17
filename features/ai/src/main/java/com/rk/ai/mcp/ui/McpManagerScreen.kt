@@ -21,8 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
@@ -83,12 +81,13 @@ fun McpManagerScreen(
     var serverToDelete by remember { mutableStateOf<McpServerConfig?>(null) }
 
     val infiniteTransition = rememberInfiniteTransition(label = "refresh_rotation")
-    val rotationAngle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(animation = tween(1000, easing = LinearEasing)),
-        label = "angle",
-    )
+    val rotationAngle by
+        infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(animation = tween(1000, easing = LinearEasing)),
+            label = "angle",
+        )
 
     PreferenceLayout(
         label = "MCP Management",
@@ -130,7 +129,10 @@ fun McpManagerScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        ),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(24.dp),
@@ -144,7 +146,8 @@ fun McpManagerScreen(
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "Connect Local or Remote MCP servers to expand AI coding tools with automated security gates.",
+                            text =
+                                "Connect Local or Remote MCP servers to expand AI coding tools with automated security gates.",
                             fontSize = 13.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             lineHeight = 18.sp,
@@ -161,9 +164,7 @@ fun McpManagerScreen(
                     McpServerCard(
                         server = server,
                         toolCount = serverTools.size,
-                        onToggleEnabled = { enabled ->
-                            McpRegistry.saveServer(server.copy(enabled = enabled))
-                        },
+                        onToggleEnabled = { enabled -> McpRegistry.saveServer(server.copy(enabled = enabled)) },
                         onViewTools = { selectedServerForTools = server },
                         onDelete = { serverToDelete = server },
                     )
@@ -240,7 +241,11 @@ fun McpManagerScreen(
         AlertDialog(
             onDismissRequest = { serverToDelete = null },
             title = { Text("Delete MCP Server?") },
-            text = { Text("Are you sure you want to delete '${server.name}'? All associated cached tools and credentials will be removed.") },
+            text = {
+                Text(
+                    "Are you sure you want to delete '${server.name}'? All associated cached tools and credentials will be removed."
+                )
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -251,11 +256,7 @@ fun McpManagerScreen(
                     Text("Delete", color = Color(0xFFEF4444))
                 }
             },
-            dismissButton = {
-                TextButton(onClick = { serverToDelete = null }) {
-                    Text("Cancel")
-                }
-            },
+            dismissButton = { TextButton(onClick = { serverToDelete = null }) { Text("Cancel") } },
         )
     }
 }
@@ -324,19 +325,21 @@ private fun McpServerCard(
     onViewTools: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val accentColor = when (server.type) {
-        McpServerType.REMOTE -> Color(0xFF2563EB) // Royal Blue
-        McpServerType.LOCAL -> Color(0xFF7C3AED) // Deep Violet
-    }
+    val accentColor =
+        when (server.type) {
+            McpServerType.REMOTE -> Color(0xFF2563EB) // Royal Blue
+            McpServerType.LOCAL -> Color(0xFF7C3AED) // Deep Violet
+        }
 
-    val statusColor = when (server.status) {
-        McpServerStatus.CONNECTED -> Color(0xFF10B981) // Green
-        McpServerStatus.CONNECTING -> Color(0xFF2563EB) // Blue
-        McpServerStatus.QUARANTINED -> Color(0xFFF59E0B) // Amber
-        McpServerStatus.OFFLINE -> Color(0xFF64748B) // Slate Gray
-        McpServerStatus.ERROR -> Color(0xFFEF4444) // Red
-        McpServerStatus.DISCONNECTED -> Color(0xFF94A3B8)
-    }
+    val statusColor =
+        when (server.status) {
+            McpServerStatus.CONNECTED -> Color(0xFF10B981) // Green
+            McpServerStatus.CONNECTING -> Color(0xFF2563EB) // Blue
+            McpServerStatus.QUARANTINED -> Color(0xFFF59E0B) // Amber
+            McpServerStatus.OFFLINE -> Color(0xFF64748B) // Slate Gray
+            McpServerStatus.ERROR -> Color(0xFFEF4444) // Red
+            McpServerStatus.DISCONNECTED -> Color(0xFF94A3B8)
+        }
 
     Card(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
@@ -356,7 +359,10 @@ private fun McpServerCard(
                 ) {
                     // Squircle container
                     Box(
-                        modifier = Modifier.size(42.dp).clip(RoundedCornerShape(12.dp)).background(accentColor.copy(alpha = 0.12f)),
+                        modifier =
+                            Modifier.size(42.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(accentColor.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
@@ -397,15 +403,13 @@ private fun McpServerCard(
             ) {
                 // Status Pill
                 Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(statusColor.copy(alpha = 0.12f))
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    modifier =
+                        Modifier.clip(RoundedCornerShape(12.dp))
+                            .background(statusColor.copy(alpha = 0.12f))
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Box(
-                        modifier = Modifier.size(6.dp).clip(CircleShape).background(statusColor)
-                    )
+                    Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(statusColor))
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "${server.status.name} ($toolCount tools)",
@@ -416,9 +420,7 @@ private fun McpServerCard(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    TextButton(onClick = onViewTools) {
-                        Text("Tools", fontSize = 13.sp)
-                    }
+                    TextButton(onClick = onViewTools) { Text("Tools", fontSize = 13.sp) }
                     IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
@@ -447,9 +449,7 @@ private fun AddMcpServerDialog(
         onDismissRequest = onDismiss,
         title = { Text("Add MCP Server", fontWeight = FontWeight.Bold) },
         text = {
-            Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-            ) {
+            Column(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
@@ -480,7 +480,9 @@ private fun AddMcpServerDialog(
                 OutlinedTextField(
                     value = urlOrCommand,
                     onValueChange = { urlOrCommand = it },
-                    label = { Text(if (type == McpServerType.REMOTE) "Endpoint URL (https://...)" else "Command / Executable") },
+                    label = {
+                        Text(if (type == McpServerType.REMOTE) "Endpoint URL (https://...)" else "Command / Executable")
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
@@ -504,23 +506,22 @@ private fun AddMcpServerDialog(
                 onClick = {
                     val id = name.trim().lowercase().replace(Regex("[^a-z0-9_]"), "_")
                     val secretKey = if (bearerToken.isNotBlank()) "mcp_token_$id" else null
-                    val config = McpServerConfig(
-                        id = id,
-                        name = name.trim(),
-                        type = type,
-                        urlOrCommand = urlOrCommand.trim(),
-                        bearerTokenSecretKey = secretKey,
-                        enabled = true,
-                    )
+                    val config =
+                        McpServerConfig(
+                            id = id,
+                            name = name.trim(),
+                            type = type,
+                            urlOrCommand = urlOrCommand.trim(),
+                            bearerTokenSecretKey = secretKey,
+                            enabled = true,
+                        )
                     onAddServer(config, bearerToken.trim().ifBlank { null })
                 },
             ) {
                 Text("Add Server", fontWeight = FontWeight.Bold)
             }
         },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
-        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
 }
 
@@ -545,11 +546,10 @@ private fun QuarantineReviewDialog(
             }
         },
         text = {
-            Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-            ) {
+            Column(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
                 Text(
-                    text = "Server '${diff.serverId}' is introducing High-Risk (Class C) tools. Review and approve before execution is permitted.",
+                    text =
+                        "Server '${diff.serverId}' is introducing High-Risk (Class C) tools. Review and approve before execution is permitted.",
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -559,7 +559,10 @@ private fun QuarantineReviewDialog(
                     Card(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                         shape = RoundedCornerShape(8.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+                        colors =
+                            CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            ),
                     ) {
                         Column(modifier = Modifier.padding(10.dp)) {
                             Row(
@@ -591,11 +594,7 @@ private fun QuarantineReviewDialog(
                 Text("Approve & Unquarantine", color = Color(0xFF10B981), fontWeight = FontWeight.Bold)
             }
         },
-        dismissButton = {
-            TextButton(onClick = onReject) {
-                Text("Reject Update", color = Color(0xFFEF4444))
-            }
-        },
+        dismissButton = { TextButton(onClick = onReject) { Text("Reject Update", color = Color(0xFFEF4444)) } },
     )
 }
 
@@ -607,26 +606,26 @@ private fun ServerToolsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text("${server.name} — Registered Tools (${tools.size})", fontWeight = FontWeight.Bold)
-        },
+        title = { Text("${server.name} — Registered Tools (${tools.size})", fontWeight = FontWeight.Bold) },
         text = {
             if (tools.isEmpty()) {
                 Text("No active tools registered for this server.")
             } else {
-                Column(
-                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
-                ) {
+                Column(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
                     tools.forEach { tool ->
-                        val riskColor = when (tool.riskClass) {
-                            McpRiskClass.CLASS_A_SAFE -> Color(0xFF10B981)
-                            McpRiskClass.CLASS_B_SCOPED -> Color(0xFF2563EB)
-                            McpRiskClass.CLASS_C_QUARANTINE -> Color(0xFFEF4444)
-                        }
+                        val riskColor =
+                            when (tool.riskClass) {
+                                McpRiskClass.CLASS_A_SAFE -> Color(0xFF10B981)
+                                McpRiskClass.CLASS_B_SCOPED -> Color(0xFF2563EB)
+                                McpRiskClass.CLASS_C_QUARANTINE -> Color(0xFFEF4444)
+                            }
                         Card(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                             shape = RoundedCornerShape(8.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
+                            colors =
+                                CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                                ),
                         ) {
                             Column(modifier = Modifier.padding(10.dp)) {
                                 Row(
@@ -658,8 +657,6 @@ private fun ServerToolsDialog(
                 }
             }
         },
-        confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
-        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("Close") } },
     )
 }

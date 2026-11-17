@@ -7,15 +7,15 @@ import com.rk.ai.mcp.model.McpRiskClass
 import com.rk.ai.mcp.model.McpServerConfig
 import com.rk.ai.mcp.model.McpServerStatus
 import com.rk.ai.mcp.model.McpToolDescriptor
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 object McpRegistry {
     private const val TAG = "McpRegistry"
@@ -62,7 +62,8 @@ object McpRegistry {
                     val content = file.readText(Charsets.UTF_8)
                     val json = JSONObject(content)
                     serverList.add(McpServerConfig.fromJson(json))
-                }.onFailure { Log.e(TAG, "Failed reading server config ${file.name}", it) }
+                }
+                    .onFailure { Log.e(TAG, "Failed reading server config ${file.name}", it) }
             }
         }
         _servers.value = serverList
@@ -79,7 +80,8 @@ object McpRegistry {
                         list.add(McpToolDescriptor.fromJson(arr.getJSONObject(i)))
                     }
                     toolsMap[serverId] = list
-                }.onFailure { Log.e(TAG, "Failed reading tools for $serverId", it) }
+                }
+                    .onFailure { Log.e(TAG, "Failed reading tools for $serverId", it) }
             }
         }
         _approvedTools.value = toolsMap
@@ -113,7 +115,9 @@ object McpRegistry {
                         }
                     }
                     val riskStr = json.optString("maxRiskClass", McpRiskClass.CLASS_C_QUARANTINE.name)
-                    val maxRisk = runCatching { McpRiskClass.valueOf(riskStr) }.getOrDefault(McpRiskClass.CLASS_C_QUARANTINE)
+                    val maxRisk = runCatching {
+                        McpRiskClass.valueOf(riskStr)
+                    }.getOrDefault(McpRiskClass.CLASS_C_QUARANTINE)
 
                     pendingList.add(
                         McpDiffResult(
@@ -125,7 +129,8 @@ object McpRegistry {
                             requiresApproval = true,
                         )
                     )
-                }.onFailure { Log.e(TAG, "Failed reading quarantine diff for $serverId", it) }
+                }
+                    .onFailure { Log.e(TAG, "Failed reading quarantine diff for $serverId", it) }
             }
         }
         _pendingApprovals.value = pendingList
@@ -162,12 +167,13 @@ object McpRegistry {
         fingerprint: String? = null,
     ) {
         val current = _servers.value.firstOrNull { it.id == serverId } ?: return
-        val updated = current.copy(
-            status = status,
-            statusMessage = message,
-            lastChecked = System.currentTimeMillis(),
-            fingerprint = fingerprint ?: current.fingerprint,
-        )
+        val updated =
+            current.copy(
+                status = status,
+                statusMessage = message,
+                lastChecked = System.currentTimeMillis(),
+                fingerprint = fingerprint ?: current.fingerprint,
+            )
         saveServer(updated)
     }
 

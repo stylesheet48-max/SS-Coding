@@ -13,8 +13,8 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /**
- * Android Keystore hardware-backed secure vault for MCP server credentials,
- * API tokens, and sensitive runtime configuration.
+ * Android Keystore hardware-backed secure vault for MCP server credentials, API tokens, and sensitive runtime
+ * configuration.
  */
 object McpSecureVault {
     private const val TAG = "McpSecureVault"
@@ -52,16 +52,16 @@ object McpSecureVault {
                 keyGenerator.generateKey()
                 Log.i(TAG, "Initialized new hardware-backed AES-256-GCM master key in AndroidKeyStore")
             }
-        }.onFailure { e ->
-            Log.e(TAG, "Failed to initialize KeyStore master key", e)
         }
+            .onFailure { e -> Log.e(TAG, "Failed to initialize KeyStore master key", e) }
     }
 
     private fun getMasterKey(): SecretKey? {
         return runCatching {
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
             keyStore.getKey(MASTER_KEY_ALIAS, null) as? SecretKey
-        }.getOrNull()
+        }
+            .getOrNull()
     }
 
     fun encrypt(plaintext: String): String {
@@ -75,10 +75,11 @@ object McpSecureVault {
             val ivBase64 = Base64.encodeToString(iv, Base64.NO_WRAP)
             val cipherTextBase64 = Base64.encodeToString(cipherText, Base64.NO_WRAP)
             "$VERSION_PREFIX$ivBase64:$cipherTextBase64"
-        }.getOrElse { e ->
-            Log.e(TAG, "Encryption failed, falling back to unencrypted text", e)
-            plaintext
         }
+            .getOrElse { e ->
+                Log.e(TAG, "Encryption failed, falling back to unencrypted text", e)
+                plaintext
+            }
     }
 
     fun decrypt(encryptedBlob: String): String {
@@ -97,10 +98,11 @@ object McpSecureVault {
             cipher.init(Cipher.DECRYPT_MODE, secretKey, GCMParameterSpec(GCM_TAG_LENGTH, iv))
             val decryptedBytes = cipher.doFinal(cipherText)
             String(decryptedBytes, Charsets.UTF_8)
-        }.getOrElse { e ->
-            Log.e(TAG, "Decryption failed", e)
-            ""
         }
+            .getOrElse { e ->
+                Log.e(TAG, "Decryption failed", e)
+                ""
+            }
     }
 
     fun saveSecret(key: String, secret: String) {

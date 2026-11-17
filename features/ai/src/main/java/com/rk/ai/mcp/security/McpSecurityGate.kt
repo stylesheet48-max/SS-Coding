@@ -8,25 +8,64 @@ import com.rk.ai.mcp.model.McpToolDescriptor
  * Enforces the 3-tier security classification and permission gate for MCP tools and updates:
  * - Class A (Low Risk): Pure compute, formatting, read-only utilities -> Auto-Apply.
  * - Class B (Moderate Risk): Read-only filesystem / metadata inspection -> Auto-Apply with scope confinement.
- * - Class C (High Risk): Write, delete, shell, network, external execution -> Strictly Quarantined awaiting Owner Approval.
+ * - Class C (High Risk): Write, delete, shell, network, external execution -> Strictly Quarantined awaiting Owner
+ *   Approval.
  */
 object McpSecurityGate {
 
-    private val CLASS_C_KEYWORDS = setOf(
-        "write", "create", "delete", "remove", "unlink", "drop", "destroy",
-        "exec", "execute", "shell", "bash", "sh", "cmd", "terminal", "run_command",
-        "eval", "process", "socket", "network", "connect", "listen", "download",
-        "upload", "install", "chmod", "chown", "sudo", "root"
-    )
+    private val CLASS_C_KEYWORDS =
+        setOf(
+            "write",
+            "create",
+            "delete",
+            "remove",
+            "unlink",
+            "drop",
+            "destroy",
+            "exec",
+            "execute",
+            "shell",
+            "bash",
+            "sh",
+            "cmd",
+            "terminal",
+            "run_command",
+            "eval",
+            "process",
+            "socket",
+            "network",
+            "connect",
+            "listen",
+            "download",
+            "upload",
+            "install",
+            "chmod",
+            "chown",
+            "sudo",
+            "root",
+        )
 
-    private val CLASS_B_KEYWORDS = setOf(
-        "read", "get", "fetch", "list", "search", "find", "grep", "cat", "view",
-        "inspect", "status", "log", "diff", "git_status", "query", "check"
-    )
+    private val CLASS_B_KEYWORDS =
+        setOf(
+            "read",
+            "get",
+            "fetch",
+            "list",
+            "search",
+            "find",
+            "grep",
+            "cat",
+            "view",
+            "inspect",
+            "status",
+            "log",
+            "diff",
+            "git_status",
+            "query",
+            "check",
+        )
 
-    /**
-     * Determines the risk class of a tool based on its name, description, and schema.
-     */
+    /** Determines the risk class of a tool based on its name, description, and schema. */
     fun classifyTool(name: String, description: String, inputSchemaJson: String): McpRiskClass {
         val lowerName = name.lowercase()
         val lowerDesc = description.lowercase()
@@ -36,14 +75,20 @@ object McpSecurityGate {
         if (CLASS_C_KEYWORDS.any { lowerName.contains(it) || lowerDesc.contains(it) }) {
             return McpRiskClass.CLASS_C_QUARANTINE
         }
-        if (lowerSchema.contains("\"command\"") || lowerSchema.contains("\"script\"") ||
-            lowerSchema.contains("\"path\"") && (lowerDesc.contains("write") || lowerDesc.contains("modify"))) {
+        if (
+            lowerSchema.contains("\"command\"") ||
+                lowerSchema.contains("\"script\"") ||
+                lowerSchema.contains("\"path\"") && (lowerDesc.contains("write") || lowerDesc.contains("modify"))
+        ) {
             return McpRiskClass.CLASS_C_QUARANTINE
         }
 
         // Check for Class B indicators
-        if (CLASS_B_KEYWORDS.any { lowerName.contains(it) || lowerDesc.contains(it) } ||
-            lowerSchema.contains("\"path\"") || lowerSchema.contains("\"url\"")) {
+        if (
+            CLASS_B_KEYWORDS.any { lowerName.contains(it) || lowerDesc.contains(it) } ||
+                lowerSchema.contains("\"path\"") ||
+                lowerSchema.contains("\"url\"")
+        ) {
             return McpRiskClass.CLASS_B_SCOPED
         }
 
@@ -51,9 +96,7 @@ object McpSecurityGate {
         return McpRiskClass.CLASS_A_SAFE
     }
 
-    /**
-     * Compares the current cached approved tools against freshly retrieved server tools.
-     */
+    /** Compares the current cached approved tools against freshly retrieved server tools. */
     fun evaluateDiff(
         serverId: String,
         currentTools: List<McpToolDescriptor>,
@@ -91,8 +134,8 @@ object McpSecurityGate {
             }
         }
 
-        val requiresApproval = (added.isNotEmpty() || modified.isNotEmpty()) &&
-                maxRisk == McpRiskClass.CLASS_C_QUARANTINE
+        val requiresApproval =
+            (added.isNotEmpty() || modified.isNotEmpty()) && maxRisk == McpRiskClass.CLASS_C_QUARANTINE
 
         return McpDiffResult(
             serverId = serverId,
