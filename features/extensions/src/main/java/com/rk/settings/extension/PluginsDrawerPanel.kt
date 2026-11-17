@@ -29,7 +29,6 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -299,7 +298,7 @@ fun PluginsDrawerPanel() {
                             modifier = Modifier.size(36.dp),
                         ) {
                             Icon(
-                                imageVector = Icons.Outlined.FilterList,
+                                painter = painterResource(drawables.filter),
                                 contentDescription = "Filter",
                                 modifier = Modifier.size(20.dp),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
