@@ -73,7 +73,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-private enum class ExtensionSortOptions(val stringRes: Int) {
+internal enum class ExtensionSortOptions(val stringRes: Int) {
     NAME(strings.name),
     RATING(strings.rating),
     DOWNLOAD_COUNT(strings.download_count),
@@ -81,14 +81,14 @@ private enum class ExtensionSortOptions(val stringRes: Int) {
     UPDATE_DATE(strings.update_date),
 }
 
-private enum class ExtensionFilterOptions(val stringRes: Int) {
+internal enum class ExtensionFilterOptions(val stringRes: Int) {
     ALL(strings.all),
     SUPPORTED(strings.supported),
     CRASHED(strings.status_crashed),
 }
 
 @Serializable
-private enum class StoreCategory(val stringRes: Int, val drawableRes: Int) {
+internal enum class StoreCategory(val stringRes: Int, val drawableRes: Int) {
     EXTENSIONS(strings.ext, drawables.extension),
     THEMES(strings.themes, drawables.palette),
     ICON_PACKS(strings.icon_packs, drawables.widgets);
@@ -490,7 +490,7 @@ private fun ExtensionSearchBar(
     )
 }
 
-private fun applyExtensionsSort(
+internal fun applyExtensionsSort(
     currentSortOption: ExtensionSortOptions,
     filtered: List<Extension>,
 ): List<Extension> =
@@ -502,7 +502,7 @@ private fun applyExtensionsSort(
         ExtensionSortOptions.UPDATE_DATE -> filtered.sortedByDescending { it.updatedAt }
     }
 
-private fun applyExtensionsFilter(
+internal fun applyExtensionsFilter(
     searchQuery: TextFieldState,
     extensions: List<Extension>,
     currentFilterOption: ExtensionFilterOptions,
@@ -539,7 +539,7 @@ private fun applyExtensionsFilter(
     }
 }
 
-private fun applyGenericFilter(
+internal fun applyGenericFilter(
     searchQuery: TextFieldState,
     packages: List<Package>,
 ): List<Package> {

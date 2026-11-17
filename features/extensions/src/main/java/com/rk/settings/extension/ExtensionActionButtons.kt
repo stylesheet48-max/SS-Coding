@@ -1,5 +1,7 @@
 package com.rk.settings.extension
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.Warning
@@ -28,9 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rk.extension.InstallState
 import com.rk.icons.Download
 import com.rk.icons.XedIcons
@@ -54,47 +60,145 @@ fun SmallExtensionActionButton(
             imageVector = Icons.Rounded.Warning,
             contentDescription = stringResource(strings.warning),
             tint = MaterialTheme.colorScheme.error,
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(8.dp),
         )
         return
     }
 
     when (installState) {
         InstallState.Idle -> {
-            IconButton(modifier = modifier, onClick = { scope.launch { onInstallClick() } }) {
-                Icon(XedIcons.Download, contentDescription = null)
+            Box(
+                modifier =
+                    modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFF2563EB).copy(alpha = 0.12f))
+                        .clickable { scope.launch { onInstallClick() } }
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = XedIcons.Download,
+                        contentDescription = stringResource(strings.install),
+                        modifier = Modifier.size(15.dp),
+                        tint = Color(0xFF2563EB),
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(strings.install),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF2563EB),
+                    )
+                }
             }
         }
 
         InstallState.Installing -> {
-            IconButton(modifier = modifier, onClick = {}, enabled = false) {
-                Icon(XedIcons.Download, contentDescription = null)
+            Box(
+                modifier =
+                    modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFF2563EB).copy(alpha = 0.08f))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(14.dp),
+                        strokeWidth = 2.dp,
+                        color = Color(0xFF2563EB),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(strings.installing),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF2563EB),
+                    )
+                }
             }
         }
 
         InstallState.Installed -> {
-            IconButton(
-                modifier = modifier,
-                onClick = { scope.launch { onUninstallClick() } },
-                colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.error),
+            Box(
+                modifier =
+                    modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.10f))
+                        .clickable { scope.launch { onUninstallClick() } }
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                Icon(Icons.Outlined.Delete, contentDescription = stringResource(strings.delete))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = stringResource(strings.delete),
+                        modifier = Modifier.size(15.dp),
+                        tint = MaterialTheme.colorScheme.error,
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(strings.delete),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
         }
 
         InstallState.Updatable -> {
-            IconButton(
-                modifier = modifier,
-                onClick = { scope.launch { onUpdateClick() } },
-                colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+            Box(
+                modifier =
+                    modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFF10B981).copy(alpha = 0.14f))
+                        .clickable { scope.launch { onUpdateClick() } }
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                Icon(painterResource(drawables.update), contentDescription = stringResource(strings.update))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(drawables.update),
+                        contentDescription = stringResource(strings.update),
+                        modifier = Modifier.size(15.dp),
+                        tint = Color(0xFF10B981),
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(strings.update),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF10B981),
+                    )
+                }
             }
         }
 
         InstallState.Updating -> {
-            IconButton(modifier = modifier, onClick = {}, enabled = false) {
-                Icon(painterResource(drawables.update), contentDescription = stringResource(strings.update))
+            Box(
+                modifier =
+                    modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFF10B981).copy(alpha = 0.08f))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(14.dp),
+                        strokeWidth = 2.dp,
+                        color = Color(0xFF10B981),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(strings.updating),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF10B981),
+                    )
+                }
             }
         }
     }

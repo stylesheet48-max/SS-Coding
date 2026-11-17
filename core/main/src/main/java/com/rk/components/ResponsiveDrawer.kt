@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.rk.settings.Settings
 
+val DrawerRailWidth: Dp = 68.dp
+
 @Composable
 inline fun getDrawerWidth(): Dp {
     val density = LocalDensity.current

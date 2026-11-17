@@ -11,7 +11,9 @@ import com.rk.activities.settings.SettingsRoutes
 import com.rk.common.XedPackage
 import com.rk.components.DialogProvider
 import com.rk.components.DialogRegistry
+import com.rk.drawer.ServiceTabRegistry
 import com.rk.extension.ActivityProvider
+import com.rk.extension.PluginTab
 import com.rk.extension.api.DynamicRoute
 import com.rk.extension.api.IntentHandleRegistry
 import com.rk.extension.api.IntentHandler
@@ -54,6 +56,7 @@ class ExtensionFeature : Feature {
     private var intentHandler: IntentHandler? = null
     private var dialogProvider: DialogProvider? = null
     private var settingsCategory: SettingsCategory? = null
+    private var pluginTab: PluginTab? = null
     private val routes = mutableListOf<DynamicRoute>()
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -176,12 +179,17 @@ class ExtensionFeature : Feature {
         )
 
         routes.forEach { SettingsRegistry.registerRoute(it) }
+
+        pluginTab = PluginTab().also { ServiceTabRegistry.register(it) }
     }
 
     override fun dispose(application: Application) {
         extensionManager.unloadAllExtensions()
         application.unregisterActivityLifecycleCallbacks(ExtensionAPIManager)
         application.unregisterActivityLifecycleCallbacks(ActivityProvider)
+
+        pluginTab?.let { ServiceTabRegistry.unregister(it) }
+        pluginTab = null
 
         intentHandler?.let { IntentHandleRegistry.unregister(it) }
         dialogProvider?.let { DialogRegistry.unregister(it) }

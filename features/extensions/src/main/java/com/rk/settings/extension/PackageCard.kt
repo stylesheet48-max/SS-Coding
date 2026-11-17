@@ -1,7 +1,9 @@
 package com.rk.settings.extension
 
 import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,11 +21,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
@@ -69,24 +73,47 @@ fun PackageCard(
             else -> drawables.extension
         }
 
+    val categoryColor =
+        when (pkg.type) {
+            PackageType.THEME -> Color(0xFFEC4899)
+            PackageType.ICON_PACK -> Color(0xFF06B6D4)
+            else -> Color(0xFF7C3AED)
+        }
+
     PreferenceTemplate(
         modifier = modifier.fillMaxWidth().clickable(onClick = { onClick(pkg) }),
         startWidget = {
-            AsyncImage(
-                model =
-                    ImageRequest.Builder(LocalContext.current)
-                        .data(pkg.iconUrl)
-                        .placeholder(placeholder)
-                        .error(placeholder)
-                        .crossfade(true)
-                        .diskCachePolicy(CachePolicy.ENABLED)
-                        .memoryCachePolicy(CachePolicy.ENABLED)
-                        .build(),
-                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(8.dp)),
-                contentDescription = null,
+            Box(
+                modifier =
+                    Modifier.size(46.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(categoryColor.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                AsyncImage(
+                    model =
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(pkg.iconUrl)
+                            .placeholder(placeholder)
+                            .error(placeholder)
+                            .crossfade(true)
+                            .diskCachePolicy(CachePolicy.ENABLED)
+                            .memoryCachePolicy(CachePolicy.ENABLED)
+                            .build(),
+                    modifier = Modifier.size(34.dp).clip(RoundedCornerShape(8.dp)),
+                    contentDescription = null,
+                )
+            }
+        },
+        title = {
+            Text(
+                text = pkg.name,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         },
-        title = { Text(text = pkg.name, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         description = {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -104,7 +131,8 @@ fun PackageCard(
                         Text(
                             text = " → v${pkg.newVersion}",
                             style = Typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF10B981),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -127,13 +155,13 @@ fun PackageCard(
                     if (progress >= 0f) {
                         LinearProgressIndicator(
                             progress = { progress },
-                            modifier = Modifier.fillMaxWidth().height(4.dp),
-                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
+                            color = Color(0xFF7C3AED),
                         )
                     } else {
                         LinearProgressIndicator(
-                            modifier = Modifier.fillMaxWidth().height(4.dp),
-                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
+                            color = Color(0xFF7C3AED),
                         )
                     }
                 }

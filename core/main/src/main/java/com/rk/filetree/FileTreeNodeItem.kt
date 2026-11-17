@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rk.components.DrawerRailWidth
 import com.rk.components.compose.utils.addIf
 import com.rk.components.getDrawerWidth
 import com.rk.file.FileObject
@@ -181,7 +182,7 @@ fun FileTreeNodeItem(
             Spacer(modifier = Modifier.width(8.dp))
 
             val underlineColor = getUnderlineColor(context, viewModel, file)
-            Row(modifier = Modifier.width((getDrawerWidth() - 61.dp)), verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.width((getDrawerWidth() - DrawerRailWidth)), verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = displayName,
                     style = MaterialTheme.typography.bodyMedium,
