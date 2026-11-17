@@ -47,8 +47,12 @@ jobs:
 
       - name: Decode and create secrets
         run: |
-          echo "${{ secrets.KEYSTORE }}" | base64 -d > /tmp/xed.keystore
-          echo "${{ secrets.PROP }}" | base64 -d > /tmp/signing.properties
+          if [ -n "${{ secrets.KEYSTORE }}" ]; then
+            echo "${{ secrets.KEYSTORE }}" | base64 -d > /tmp/xed.keystore
+          fi
+          if [ -n "${{ secrets.PROP }}" ]; then
+            echo "${{ secrets.PROP }}" | base64 -d > /tmp/signing.properties
+          fi
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

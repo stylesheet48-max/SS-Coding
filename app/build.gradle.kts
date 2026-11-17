@@ -76,25 +76,37 @@ android {
                 if (isGitHubActions) {
                     "/tmp/signing.properties"
                 } else {
-                    "/home/rohit/Android/xed-signing/signing.properties"
+                    "${System.getProperty("user.home")}/.android/signing.properties"
                 }
 
             val propertiesFile = File(propertiesFilePath)
-            if (propertiesFile.exists()) {
+            if (propertiesFile.exists() && propertiesFile.length() > 0) {
                 val properties = Properties()
                 properties.load(propertiesFile.inputStream())
-                keyAlias = properties["keyAlias"] as String?
-                keyPassword = properties["keyPassword"] as String?
-                storeFile =
-                    if (isGitHubActions) {
-                        File("/tmp/xed.keystore")
-                    } else {
-                        (properties["storeFile"] as String?)?.let { File(it) }
-                    }
-
-                storePassword = properties["storePassword"] as String?
+                val pass = properties["storePassword"] as String?
+                if (!pass.isNullOrBlank()) {
+                    keyAlias = properties["keyAlias"] as String?
+                    keyPassword = properties["keyPassword"] as String?
+                    storeFile =
+                        if (isGitHubActions) {
+                            File("/tmp/xed.keystore")
+                        } else {
+                            (properties["storeFile"] as String?)?.let { File(it) }
+                        }
+                    storePassword = pass
+                } else {
+                    // Fall back to testkey when secrets are not populated
+                    storeFile = file(layout.buildDirectory.dir("../testkey.keystore"))
+                    storePassword = "testkey"
+                    keyAlias = "testkey"
+                    keyPassword = "testkey"
+                }
             } else {
-                println("Signing properties file not found at $propertiesFilePath")
+                println("Signing properties file not found or empty at $propertiesFilePath, falling back to testkey")
+                storeFile = file(layout.buildDirectory.dir("../testkey.keystore"))
+                storePassword = "testkey"
+                keyAlias = "testkey"
+                keyPassword = "testkey"
             }
         }
         getByName("debug") {
