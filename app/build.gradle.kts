@@ -12,13 +12,13 @@ val playStoreFlavor = "playstore"
 
 android {
     namespace = "com.stylesheet.editor"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.stylesheet.editor"
         minSdk = 26
 
-        targetSdk = 36
+        targetSdk = 37
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // versioning
