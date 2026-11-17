@@ -117,7 +117,8 @@ object McpRegistry {
                     val riskStr = json.optString("maxRiskClass", McpRiskClass.CLASS_C_QUARANTINE.name)
                     val maxRisk = runCatching {
                         McpRiskClass.valueOf(riskStr)
-                    }.getOrDefault(McpRiskClass.CLASS_C_QUARANTINE)
+                    }
+                        .getOrDefault(McpRiskClass.CLASS_C_QUARANTINE)
 
                     pendingList.add(
                         McpDiffResult(
