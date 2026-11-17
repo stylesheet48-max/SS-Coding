@@ -79,7 +79,7 @@ fun LanguageScreen(modifier: Modifier = Modifier) {
             ExtendedFloatingActionButton(
                 onClick = {
                     context.startActivity(
-                        Intent(Intent.ACTION_VIEW, "https://hosted.weblate.org/engage/xed-editor/".toUri())
+                        Intent(Intent.ACTION_VIEW, "https://github.com/stylesheet48-max/SS-Coding".toUri())
                     )
                 },
                 text = { Text(stringResource(strings.translate)) },

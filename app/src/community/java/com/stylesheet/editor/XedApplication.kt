@@ -1,4 +1,4 @@
-package com.rk.application
+package com.stylesheet.editor
 
 import com.rk.App
 import com.rk.ExtensionFeature

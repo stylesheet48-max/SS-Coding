@@ -15,33 +15,49 @@ internal object XedAccountClient {
     private val JSON = "application/json; charset=utf-8".toMediaType()
 
     suspend fun begin(codeChallenge: String): AuthState =
-        execute(
+        withContext(Dispatchers.IO) {
+            if (AccountConfig.API_BASE.isBlank()) {
+                throw AccountApiException("Account service is not configured (Offline Mode)")
+            }
+            execute(
                 Request.Builder()
                     .url("${AccountConfig.API_BASE}/auth/android/begin")
                     .post(jsonBody("codeChallenge" to codeChallenge))
                     .build()
             )
             .let { accountJson.decodeFromString<AuthState>(it) }
+        }
 
     suspend fun exchange(code: String, codeVerifier: String): TokenResponse =
-        execute(
+        withContext(Dispatchers.IO) {
+            if (AccountConfig.API_BASE.isBlank()) {
+                throw AccountApiException("Account service is not configured (Offline Mode)")
+            }
+            execute(
                 Request.Builder()
                     .url("${AccountConfig.API_BASE}/auth/android/token")
                     .post(jsonBody("code" to code, "codeVerifier" to codeVerifier))
                     .build()
             )
             .let { accountJson.decodeFromString<TokenResponse>(it) }
+        }
 
     suspend fun refresh(refreshToken: String): TokenResponse =
-        execute(
+        withContext(Dispatchers.IO) {
+            if (AccountConfig.API_BASE.isBlank()) {
+                throw AccountApiException("Account service is not configured (Offline Mode)")
+            }
+            execute(
                 Request.Builder()
                     .url("${AccountConfig.API_BASE}/auth/android/refresh")
                     .post(jsonBody("refreshToken" to refreshToken))
                     .build()
             )
             .let { accountJson.decodeFromString<TokenResponse>(it) }
+        }
 
     suspend fun logout(accessToken: String) {
+        if (AccountConfig.API_BASE.isBlank()) return
         execute(
             Request.Builder()
                 .url("${AccountConfig.API_BASE}/auth/android/logout")

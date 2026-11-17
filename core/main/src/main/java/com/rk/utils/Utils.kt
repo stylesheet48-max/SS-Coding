@@ -189,7 +189,7 @@ fun <K> x(m: MutableCollection<K>, c: Int) {
 }
 
 fun Context.openDocs(page: String) {
-    openUrl("https://xed-editor.github.io/Xed-Docs/docs/$page")
+    openUrl("https://github.com/stylesheet48-max/SS-Coding#readme")
 }
 
 fun Context.openUrl(url: String) {
@@ -222,7 +222,7 @@ fun copyToClipboard(label: String, text: String, showToast: Boolean = true) {
 }
 
 fun copyToClipboard(text: String, showToast: Boolean = true) {
-    copyToClipboard(label = "Xed-Editor", text, showToast = showToast)
+    copyToClipboard(label = "SS coding", text, showToast = showToast)
 }
 
 fun expectOOM(requiredMemBytes: Long): Boolean {

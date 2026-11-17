@@ -3,7 +3,11 @@
     <application>
         <service
             android:name="com.rk.terminal.SessionService"
-            android:foregroundServiceType="specialUse" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Terminal background compilation and shell execution" />
+        </service>
 
         <activity
             android:name="com.rk.activities.terminal.Terminal"

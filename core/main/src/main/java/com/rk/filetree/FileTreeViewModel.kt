@@ -33,7 +33,8 @@ fun FileObject.isZip(): Boolean {
 }
 
 fun FileObject.isXedPackage(): Boolean {
-    return isFile() && getExtension().equals("xed", ignoreCase = true)
+    val ext = getExtension()
+    return isFile() && (ext.equals("xed", ignoreCase = true) || ext.equals("sscode", ignoreCase = true))
 }
 
 class FileTreeViewModel : ViewModel() {

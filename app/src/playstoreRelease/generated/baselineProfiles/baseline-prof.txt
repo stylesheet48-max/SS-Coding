@@ -24871,9 +24871,9 @@ SPLcom/rk/app/AppFlavour$Companion;-><init>()V
 SPLcom/rk/app/AppFlavour$Companion;-><init>(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 SPLcom/rk/app/AppFlavour$Companion;->fromId(Ljava/lang/String;)Lcom/rk/app/AppFlavour;
 SPLcom/rk/app/AppFlavour$Companion;->init(Ljava/lang/String;)V
-Lcom/rk/application/XedApplication;
-SPLcom/rk/application/XedApplication;-><init>()V
-SPLcom/rk/application/XedApplication;->onCreate()V
+Lcom/stylesheet/editor/XedApplication;
+SPLcom/stylesheet/editor/XedApplication;-><init>()V
+SPLcom/stylesheet/editor/XedApplication;->onCreate()V
 Lcom/rk/color/ColorUtilsKt;
 SPLcom/rk/color/ColorUtilsKt;->toHex-8_81llA(J)Ljava/lang/String;
 Lcom/rk/commands/Command;

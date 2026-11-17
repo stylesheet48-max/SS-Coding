@@ -1,44 +1,19 @@
-## Xed-Editor
+## SS coding
 
-<img src="/fastlane/metadata/android/en-US/images/icon.png" alt="Xed-Editor Icon" width="90" height="90" align="left"/>
+<img src="/fastlane/metadata/android/en-US/images/icon.png" alt="SS coding Icon" width="90" height="90" align="left"/>
 
-**Xed-Editor** is a versatile and extensible text editor for Android, featuring syntax highlighting,
-LSP-powered code intelligence, a built-in terminal, extensions, and fast project-wide tools for
+**SS coding** is a versatile and extensible code editor and terminal environment for Android, featuring syntax highlighting,
+LSP-powered code intelligence, a built-in Ubuntu Linux terminal, Git version control, and fast project-wide tools for
 efficient editing.
 
-![Android CI](https://github.com/Rohitkushvaha01/Xed-Editor/actions/workflows/android.yml/badge.svg?event=push&style=for-the-badge)
-![Download count](https://img.shields.io/github/downloads/Xed-Editor/Xed-Editor/total?label=Downloads)
-
----
-
-## Website
-
-To learn more about Xed-Editor, including its documentation, extensions, themes, icon packs, and account-related features, visit the official website:
-https://xed-editor.app
-
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/6bKzcQRuef)
-[![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/XedEditor)
+![Android CI](https://github.com/stylesheet48-max/SS-Coding/actions/workflows/android.yml/badge.svg?event=push&style=for-the-badge)
 
 ---
 
 ## Download
 
-<div>
-  <a href="https://android.izzysoft.de/repo/apk/com.rk.xededitor">
-    <img src="https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.rk.xededitor&label=IzzyOnDroid&cacheSeconds=33000">
-  </a>
-  <a href="https://f-droid.org/packages/com.rk.xededitor">
-    <img src="https://img.shields.io/f-droid/v/com.rk.xededitor">
-  </a>
-</div>
-
-- **Latest Alpha Build**: Download from [Actions](https://github.com/Xed-Editor/Xed-Editor/actions/)
-- **Latest Stable Build**: Download
-  from [Releases](https://github.com/Xed-Editor/Xed-Editor/releases)
-
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="75">](https://play.google.com/store/apps/details?id=com.rk.axion)
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/com.rk.xededitor)
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png?ref_type=heads" alt="Get it on IzzyOnDroid" height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.rk.xededitor)
+- **Latest Stable Release**: Download from [GitHub Releases](https://github.com/stylesheet48-max/SS-Coding/releases)
+- **Nightly Actions Builds**: Download from [GitHub Actions](https://github.com/stylesheet48-max/SS-Coding/actions/)
 
 ---
 

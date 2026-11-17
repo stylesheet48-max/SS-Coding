@@ -554,7 +554,7 @@ enum class BuiltinFileType(
         lspLanguageId = null,
     ),
     XED_PACKAGE(
-        extensions = listOf("xed"),
+        extensions = listOf("sscode", "xed"),
         textmateScope = null,
         icon = Icon.ResourceIcon(xed),
         title = strings.xed_package.getString(),

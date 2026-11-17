@@ -84,6 +84,7 @@ object StoreManager {
         onProgress: (progress: Float) -> Unit,
     ): Boolean =
         withContext(Dispatchers.IO) {
+            if (url.isEmpty()) return@withContext false
             runCatching {
                 val request = Request.Builder().url(url).build()
                 client.newCall(request).execute().use { response ->
@@ -116,6 +117,7 @@ object StoreManager {
 
     suspend fun fetchExtensions(): List<ExtensionEntry> =
         withContext(Dispatchers.IO) {
+            if (BASE_URL.isEmpty()) return@withContext emptyList()
             runCatching {
                 val jsonString = requestJson(BASE_URL)
                 val response = json.decodeFromString<ExtensionListResponse>(jsonString)
@@ -128,25 +130,26 @@ object StoreManager {
                 .getOrElse { emptyList() }
         }
 
-    fun getIconUrl(id: String): String = "$BASE_URL/$id/icon.png"
+    fun getIconUrl(id: String): String = if (BASE_URL.isEmpty()) "" else "$BASE_URL/$id/icon.png"
 
-    fun getReadmeUrl(id: String): String = "$BASE_URL/$id/README.md"
+    fun getReadmeUrl(id: String): String = if (BASE_URL.isEmpty()) "" else "$BASE_URL/$id/README.md"
 
-    fun getChangelogUrl(id: String): String = "$BASE_URL/$id/CHANGELOG.md"
+    fun getChangelogUrl(id: String): String = if (BASE_URL.isEmpty()) "" else "$BASE_URL/$id/CHANGELOG.md"
 
-    fun getThemeIconUrl(id: String): String = "$THEMES_API_BASE/$id/icon.png"
+    fun getThemeIconUrl(id: String): String = if (THEMES_API_BASE.isEmpty()) "" else "$THEMES_API_BASE/$id/icon.png"
 
-    fun getThemeReadmeUrl(id: String): String = "$THEMES_API_BASE/$id/README.md"
+    fun getThemeReadmeUrl(id: String): String = if (THEMES_API_BASE.isEmpty()) "" else "$THEMES_API_BASE/$id/README.md"
 
-    fun getThemeChangelogUrl(id: String): String = "$THEMES_API_BASE/$id/CHANGELOG.md"
+    fun getThemeChangelogUrl(id: String): String = if (THEMES_API_BASE.isEmpty()) "" else "$THEMES_API_BASE/$id/CHANGELOG.md"
 
-    fun getIconPackIconUrl(id: String): String = "$ICONPACKS_API_BASE/$id/icon.png"
+    fun getIconPackIconUrl(id: String): String = if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/icon.png"
 
-    fun getIconPackReadmeUrl(id: String): String = "$ICONPACKS_API_BASE/$id/README.md"
+    fun getIconPackReadmeUrl(id: String): String = if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/README.md"
 
-    fun getIconPackChangelogUrl(id: String): String = "$ICONPACKS_API_BASE/$id/CHANGELOG.md"
+    fun getIconPackChangelogUrl(id: String): String = if (ICONPACKS_API_BASE.isEmpty()) "" else "$ICONPACKS_API_BASE/$id/CHANGELOG.md"
 
     private fun requestJson(url: String): String {
+        if (url.isEmpty()) return ""
         val req = Request.Builder().url(url).build()
         return client.newCall(req).execute().use { res ->
             if (!res.isSuccessful) error("HTTP ${res.code}")
@@ -158,6 +161,7 @@ object StoreManager {
 
     suspend fun fetchThemes(): List<ThemeEntry> =
         withContext(Dispatchers.IO) {
+            if (THEMES_API_BASE.isEmpty()) return@withContext emptyList()
             runCatching {
                 val jsonString = requestJson(THEMES_API_BASE)
                 val response = json.decodeFromString<ThemeListResponse>(jsonString)
@@ -169,6 +173,7 @@ object StoreManager {
 
     suspend fun fetchIconPacks(): List<IconPackEntry> =
         withContext(Dispatchers.IO) {
+            if (ICONPACKS_API_BASE.isEmpty()) return@withContext emptyList()
             runCatching {
                 val jsonString = requestJson(ICONPACKS_API_BASE)
                 val response = json.decodeFromString<IconPackListResponse>(jsonString)

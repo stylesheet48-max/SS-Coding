@@ -246,7 +246,7 @@ class CrashActivity : ComponentActivity() {
             if (!repo.isNullOrEmpty()) {
                 repo.removeSuffix("/")
             } else {
-                "https://github.com/Xed-Editor/Xed-Editor"
+                "https://github.com/stylesheet48-max/SS-Coding"
             }
         if (SourceCodeProvider.fromUrl(baseUrl) != SourceCodeProvider.GitHub) {
             context.openUrl(baseUrl)

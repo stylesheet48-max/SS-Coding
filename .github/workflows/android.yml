@@ -64,7 +64,7 @@ jobs:
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Build with Gradle
-        run: ./gradlew assembleCommunityRelease --no-daemon && mv app/build/outputs/apk/community/release/*.apk app/xed-editor-${{ env.COMMIT_HASH }}.apk
+        run: ./gradlew assembleCommunityRelease --no-daemon && mv app/build/outputs/apk/community/release/*.apk app/ss-coding-${{ env.COMMIT_HASH }}.apk
         env:
           KEYSTORE_FILE: /tmp/xed.keystore
           SIGNING_PROPERTIES_FILE: /tmp/signing.properties
@@ -73,22 +73,11 @@ jobs:
       - name: Archive APK
         uses: actions/upload-artifact@v7
         with:
-          name: Xed-Editor-Release
-          path: app/xed-editor-${{ env.COMMIT_HASH }}.apk
+          name: SS-Coding-Release
+          path: app/ss-coding-${{ env.COMMIT_HASH }}.apk
 
       - name: Delete secrets
-        run: rm /tmp/xed.keystore /tmp/signing.properties
-
-      - name: Send APK to Telegram
-        if: ${{ success() && github.event.head_commit.message != '' }}
-        env:
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
-        run: |
-          curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
-            -F chat_id="-1002408175863" \
-            -F message_thread_id="582" \
-            -F document=@"app/xed-editor-${{ env.COMMIT_HASH }}.apk" \
-            --form-string "caption=$COMMIT_MSG"
+        run: rm -f /tmp/xed.keystore /tmp/signing.properties
 
       - name: Generate Plugin Sdk
         run: |

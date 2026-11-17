@@ -11,19 +11,19 @@ val communityFlavor = "community"
 val playStoreFlavor = "playstore"
 
 android {
-    namespace = "com.rk.application"
-    compileSdk = 37
+    namespace = "com.stylesheet.editor"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.rk.xededitor"
+        applicationId = "com.stylesheet.editor"
         minSdk = 26
 
-        targetSdk = 37
+        targetSdk = 36
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // versioning
-        versionCode = 112
-        versionName = "3.4.9"
+        versionCode = 1
+        versionName = "1.0.0"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -42,8 +42,7 @@ android {
         // the `:features:extensions` module.
         create(playStoreFlavor) {
             dimension = distributionDimension
-            // using this id because I don't want to go through 14 day testing again
-            applicationId = "com.rk.axion"
+            applicationId = "com.stylesheet.editor"
             buildConfigField("String", "FLAVOUR", "\"$playStoreFlavor\"")
         }
     }
@@ -121,7 +120,7 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-DEBUG"
-            resValue("string", "app_name", "Xed-Debug")
+            resValue("string", "app_name", "SS coding")
         }
 
         create("benchmark") {

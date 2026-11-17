@@ -199,7 +199,7 @@ private fun reportLogs(logText: String, issueTitle: String, copyLabel: String) {
     val context = SettingsActivity.instance!!
 
     val encodedTitle = URLEncoder.encode(issueTitle, StandardCharsets.UTF_8.toString())
-    val urlStart = "https://github.com/Xed-Editor/Xed-Editor/issues/new?title=$encodedTitle&body="
+    val urlStart = "https://github.com/stylesheet48-max/SS-Coding/issues/new?title=$encodedTitle&body="
     val url = urlStart + URLEncoder.encode("```log \n${logText}\n ```", StandardCharsets.UTF_8.toString())
     if (url.length > 2048) {
         val trimmedUrl =
