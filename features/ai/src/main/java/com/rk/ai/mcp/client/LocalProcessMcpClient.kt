@@ -45,6 +45,7 @@ class LocalProcessMcpClient(
                         throw IllegalStateException("Local MCP init error: ${err.optString("message")}")
                     }
                     Log.i(TAG, "Connected to local MCP server ${config.name} ($serverId)")
+                    Unit
                 }
             }
         }
